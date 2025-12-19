@@ -27,3 +27,17 @@ stages:
               Write-Host "Tfscan is in progress"
               New-Item -ItemType Directory -Force -Path scan-results\tfsec
               tfsec . --format junit --out scan-results\tfsec\tfsec.json
+        - task: PowerShell@2
+          displayName: Task-fmt
+          inputs:
+            targetType: 'inline'
+            script: |
+              Write-Host "fmt is in progress"              
+              terraform fmt -check -recursive
+        - task: PowerShell@2
+          displayName: Task-validate
+          inputs:
+            targetType: 'inline'
+            script: |
+              Write-Host "validate is in progress"              
+              terraform validate
