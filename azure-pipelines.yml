@@ -32,8 +32,10 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              Write-Host "fmt is in progress"              
-              terraform fmt -check -recursive
+              Write-Host "fmt is in progress"
+              New-Item -ItemType Directory -Force -Path scan-results\fmt
+              terraform fmt -check -recursive --format json --out scan-results\fmt\fmt.json              
+              
         - task: PowerShell@2
           displayName: Task-validate
           inputs:
