@@ -16,7 +16,8 @@ stages:
             targetType: 'inline'
             script: |
               Write-Host "Tflint is in progress"
-              tflint --recursive        
+              New-Item -ItemType Directory -Force -Path scan-results\tflint
+              tflint --recursive --format junit > scan-results\tflint\tflint-junit.xml        
         - task: PowerShell@2
           continueOnError: true
           displayName: Task-tfsec
