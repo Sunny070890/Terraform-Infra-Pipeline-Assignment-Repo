@@ -7,7 +7,7 @@ stages:
     displayName: Stage-Scanning
     jobs:
       - job: ScanJob
-        displayName: Job-Scan
+        displayName: tflint+checkov+tfsec
         steps:
         - task: PowerShell@2
           continueOnError: true
