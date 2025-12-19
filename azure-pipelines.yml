@@ -55,6 +55,7 @@ stages:
             provider: 'azurerm'
             command: 'init'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+            backendServiceArm: 'dec25'
             backendAzureRmStorageAccountName: 'stg31211212'
             backendAzureRmContainerName: 'stgcont1'
             backendAzureRmKey: 'stg.tfstate'
