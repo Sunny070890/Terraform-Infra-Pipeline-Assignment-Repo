@@ -113,12 +113,19 @@ stages:
     jobs:
       - job: ApplyJob
         steps:
-        - task: DownloadPipelineArtifact@2
-          displayName: Download Plan artifacts
+        # - task: DownloadPipelineArtifact@2
+        #   displayName: Download Plan artifacts
+        #   inputs:
+        #     buildType: 'current'
+        #     artifactName: 'TerraformPlan'
+        #     targetPath: '$(System.DefaultWorkingDirectory)/environments/dev'
+        - task: DownloadBuildArtifacts@1
           inputs:
             buildType: 'current'
+            downloadType: 'single'
             artifactName: 'TerraformPlan'
-            targetPath: '$(System.DefaultWorkingDirectory)/environments/dev'
+            downloadPath: '$(System.DefaultWorkingDirectory)/environments/dev'
+        
         - task: TerraformTask@5
           displayName: Task- INIT
           inputs:
