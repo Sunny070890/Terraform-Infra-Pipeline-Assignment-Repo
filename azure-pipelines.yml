@@ -43,6 +43,13 @@ stages:
             script: |
               Write-Host "validate is in progress"              
               terraform validate
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)/scan-results'
+            ArtifactName: 'ScanResults'
+            publishLocation: 'Container'
+
+        
 
   # - stage: 
   #   displayName: Stage-Init&Plan
