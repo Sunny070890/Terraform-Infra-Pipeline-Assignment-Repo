@@ -50,7 +50,7 @@ stages:
             ArtifactName: 'ScanResults'
             publishLocation: 'Container'
 
-  - stage: 
+  - stage: InitPlanStage
     displayName: Stage-Init&Plan
     dependsOn: ScanStage
     jobs:
@@ -92,6 +92,7 @@ stages:
             publishLocation: 'Container'
 
   - stage: ManualValidation
+    dependsOn: InitPlanStage
     displayName: Manual Validation Stage
     pool: server
     jobs:
@@ -105,3 +106,9 @@ stages:
               sunnyknt4@gmail.com
             approvers: 'sunnyknt4@outlook.com'
             instructions: 'Kindly review plan and approve'
+
+  - stage: ApplyStage
+    displayName: Apply Stage
+    dependsOn: ManualValidation
+    jobs:
+      - job: Init        
