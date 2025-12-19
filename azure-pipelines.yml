@@ -87,7 +87,7 @@ stages:
         - task: PublishBuildArtifacts@1
           displayName: Publish Terraform Plan
           inputs:
-            PathtoPublish: '$(System.DefaultWorkingDirectory)/environments/dev/tfplan.txt'
+            PathtoPublish: '$(System.DefaultWorkingDirectory)/environments/dev/tfplan'
             ArtifactName: 'TerraformPlan'
             publishLocation: 'Container'
 
@@ -144,5 +144,5 @@ stages:
             command: 'apply'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
             environmentServiceNameAzureRM: 'dec25'
-            commandOptions: 'tfplan'
+            commandOptions: 'TerraformPlan/tfplan'
       
