@@ -26,4 +26,4 @@ stages:
             script: |
               Write-Host "Tfscan is in progress"
               New-Item -ItemType Directory -Force -Path scan-results\tfsec
-              tfsec . --format junit --out scan-results\tfsec\tfsec.sarif
+              tfsec . --format junit --out scan-results\tfsec\tfsec.json
