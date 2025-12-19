@@ -111,4 +111,31 @@ stages:
     displayName: Apply Stage
     dependsOn: ManualValidation
     jobs:
-      - job: Init        
+      - job: ApplyJob
+        steps:
+        - task: DownloadPipelineArtifact@2
+          displayName: Download Plan artifacts
+          inputs:
+            buildType: 'current'
+            artifactName: 'TerraformPlan'
+            targetPath: '$(System.DefaultWorkingDirectory)/environments/dev'
+        - task: TerraformTask@5
+          displayName: Task- INIT
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+            backendServiceArm: 'dec25'
+            backendAzureRmStorageAccountName: 'stg31211212'
+            backendAzureRmContainerName: 'stgcont1'
+            backendAzureRmKey: 'stg.tfstate'
+
+        - task: TerraformTask@5
+          displayName: Task-Apply
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+            environmentServiceNameAzureRM: 'dec25'
+            commandOptions: 'tfplan'
+      
