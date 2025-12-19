@@ -85,3 +85,10 @@ stages:
             script: |
               terraform show -no-color tfplan > tfplan.txt
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+
+        - task: PublishBuildArtifacts@1
+          displayName: Publish Terraform Plan
+          inputs:
+            PathtoPublish: '$(System.DefaultWorkingDirectory)/environments/dev/tfplan.txt'
+            ArtifactName: 'TerraformPlan'
+            publishLocation: 'Container'
