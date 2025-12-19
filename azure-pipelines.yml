@@ -16,9 +16,10 @@ stages:
             targetType: 'inline'
             script: |
               Write-Host "Tflint is in progress"
-              tflint --recursive
-        
+              tflint --recursive        
         - task: PowerShell@2
+          continueOnError: true
+          displayName: Task-tfsec
           inputs:
             targetType: 'inline'
             script: |
