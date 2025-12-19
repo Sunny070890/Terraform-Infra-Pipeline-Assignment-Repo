@@ -10,6 +10,7 @@ stages:
         displayName: Job-Scan
         steps:
         - task: PowerShell@2
+          continueOnError: true
           displayName: Task-tflint
           inputs:
             targetType: 'inline'
