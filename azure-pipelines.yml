@@ -13,6 +13,11 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
+              Write-Host "Terraform version is:"
               terraform -v
+              Write-Host "Tfsec version is:"
               tfsec -v
+              Write-Host "Tflint version is:"
               tflint --version
+              Write-Host "Checkov version is:"
+              checkov --version
