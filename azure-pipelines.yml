@@ -68,3 +68,10 @@ stages:
             backendAzureRmStorageAccountName: 'stg31211212'
             backendAzureRmContainerName: 'stgcont1'
             backendAzureRmKey: 'stg.tfstate'
+        - task: TerraformTask@5
+          displayName: Task-Plan
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+            environmentServiceNameAzureRM: 'dec25'
