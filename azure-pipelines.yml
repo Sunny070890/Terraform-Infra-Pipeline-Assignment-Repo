@@ -44,18 +44,18 @@ stages:
               Write-Host "validate is in progress"              
               terraform validate
 
-  - stage: 
-    displayName: Stage-Init&Plan
-    jobs:
-      - job: JobInitPlan
-        displayName: Job-Init-Plan
-        steps:
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-            backendServiceArm: 'dec25'
-            backendAzureRmStorageAccountName: 'stg31211212'
-            backendAzureRmContainerName: 'stgcont1'
-            backendAzureRmKey: 'stg.tfstate'
+  # - stage: 
+  #   displayName: Stage-Init&Plan
+  #   jobs:
+  #     - job: JobInitPlan
+  #       displayName: Job-Init-Plan
+  #       steps:
+  #       - task: TerraformTask@5
+  #         inputs:
+  #           provider: 'azurerm'
+  #           command: 'init'
+  #           workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+  #           backendServiceArm: 'dec25'
+  #           backendAzureRmStorageAccountName: 'stg31211212'
+  #           backendAzureRmContainerName: 'stgcont1'
+  #           backendAzureRmKey: 'stg.tfstate'
