@@ -54,6 +54,7 @@ stages:
 
   - stage: 
     displayName: Stage-Init&Plan
+    dependsOn: ScanStage
     jobs:
       - job: JobInitPlan
         displayName: Job-Init-Plan
