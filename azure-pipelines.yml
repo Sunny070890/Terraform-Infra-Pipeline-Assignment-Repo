@@ -76,3 +76,12 @@ stages:
             command: 'plan'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
             environmentServiceNameAzureRM: 'dec25'
+            commandOptions: '-out=tfplan'
+        
+        - task: PowerShell@2
+          displayName: Convert Plan to Text
+          inputs:
+            targetType: 'inline'
+            script: |
+              terraform show -no-color tfplan > tfplan.txt
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
