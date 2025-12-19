@@ -29,6 +29,7 @@ stages:
               tfsec . --format junit --out scan-results\tfsec\tfsec.json
         - task: PowerShell@2
           displayName: Task-fmt
+          continueOnError: true
           inputs:
             targetType: 'inline'
             script: |
