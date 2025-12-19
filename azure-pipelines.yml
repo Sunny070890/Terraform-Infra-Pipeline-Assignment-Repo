@@ -3,21 +3,14 @@ trigger: none
 pool: nov-25-pool
 
 stages:
-  - stage: terraformInit
-    displayName: Terraform Init Stage
+  - stage: ScanStage
+    displayName: Stage-Scanning
     jobs:
-      - job: Init
-        displayName: init job
+      - job: ScanJob
+        displayName: Job-Scan
         steps:
         - task: PowerShell@2
+          displayName: Task-tflint
           inputs:
             targetType: 'inline'
-            script: |
-              Write-Host "Terraform version is:"
-              terraform -v
-              Write-Host "Tfsec version is:"
-              tfsec -v
-              Write-Host "Tflint version is:"
-              tflint --version
-              Write-Host "Checkov version is:"
-              checkov --version
+            script: 'tflint --recursive'
