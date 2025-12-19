@@ -50,8 +50,6 @@ stages:
             ArtifactName: 'ScanResults'
             publishLocation: 'Container'
 
-        
-
   - stage: 
     displayName: Stage-Init&Plan
     dependsOn: ScanStage
@@ -92,3 +90,18 @@ stages:
             PathtoPublish: '$(System.DefaultWorkingDirectory)/environments/dev/tfplan.txt'
             ArtifactName: 'TerraformPlan'
             publishLocation: 'Container'
+
+  - stage: ManualValidation
+    displayName: Manual Validation Stage
+    pool: server
+    jobs:
+      - job: ManualValidationJob
+        displayName: Manual validation Job
+        steps:
+        - task: ManualValidation@1
+          inputs:
+            notifyUsers: |
+              sunnyknt4@outlook.com
+              sunnyknt4@gmail.com
+            approvers: 'sunnyknt4@outlook.com'
+            instructions: 'Kindly review plan and approve'
