@@ -76,11 +76,11 @@ stages:
             environmentServiceNameAzureRM: 'dec25'
             commandOptions: '-out=tfplan'
         - task: PowerShell@2
-          displayName: Run Infracost (Local Binary)
+          displayName: Run Infracost (Agent Tool)
           inputs:
             targetType: 'inline'
             script: |
-              .\tools\infracost\infracost.exe --version
+              C:\agent\_work\_tool\infracost\infracost.exe --version
             workingDirectory: '$(System.DefaultWorkingDirectory)'
   #       - task: PowerShell@2
   #         displayName: Convert Plan to Text
