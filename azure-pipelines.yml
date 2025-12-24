@@ -119,11 +119,12 @@ stages:
             script: |
               New-Item -ItemType Directory -Force -Path scan-results\infracost
 
-              infracost breakdown `
-                --path tfplan.json `
+              C:\agent\_work\_tool\infracost\infracost.exe breakdown `
+                --path tfplan `
+                --terraform-plan `
                 --format json `
                 --out-file scan-results\infracost\infracost.json
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+               workingDirectory: $(System.DefaultWorkingDirectory)/environments/dev
 
         
 
