@@ -76,16 +76,12 @@ stages:
             environmentServiceNameAzureRM: 'dec25'
             commandOptions: '-out=tfplan'
         - task: PowerShell@2
-          displayName: Download Infracost
+          displayName: Run Infracost (Local Binary)
           inputs:
             targetType: 'inline'
             script: |
-              Write-Host "Downloading Infracost..."
-              Invoke-WebRequest `
-                -Uri https://github.com/infracost/infracost/releases/latest/download/infracost-windows-amd64.exe `
-                -OutFile infracost.exe
-              .\infracost.exe --version
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+              .\tools\infracost\infracost.exe --version
+            workingDirectory: '$(System.DefaultWorkingDirectory)'
   #       - task: PowerShell@2
   #         displayName: Convert Plan to Text
   #         inputs:
