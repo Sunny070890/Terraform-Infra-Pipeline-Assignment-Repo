@@ -1,6 +1,10 @@
 trigger: none
+variables:
+- group: New variable group 24-Dec
 
 pool: nov-25-pool
+
+
 
 stages:
   - stage: ScanStage
