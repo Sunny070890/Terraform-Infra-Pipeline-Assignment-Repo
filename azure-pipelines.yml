@@ -3,52 +3,52 @@ trigger: none
 pool: nov-25-pool
 
 stages:
-  # - stage: ScanStage
-  #   displayName: Stage-Scanning
-  #   jobs:
-  #     - job: ScanJob
-  #       displayName: tflint+checkov+tfsec
-  #       steps:
-  #       - task: PowerShell@2
-  #         continueOnError: true
-  #         displayName: Task-tflint
-  #         inputs:
-  #           targetType: 'inline'
-  #           script: |
-  #             Write-Host "Tflint is in progress"
-  #             New-Item -ItemType Directory -Force -Path scan-results\tflint
-  #             tflint --recursive --format junit > scan-results\tflint\tflint.json        
-  #       - task: PowerShell@2
-  #         continueOnError: true
-  #         displayName: Task-tfsec
-  #         inputs:
-  #           targetType: 'inline'
-  #           script: |
-  #             Write-Host "Tfscan is in progress"
-  #             New-Item -ItemType Directory -Force -Path scan-results\tfsec
-  #             tfsec . --format junit --out scan-results\tfsec\tfsec.json
-  #       - task: PowerShell@2
-  #         displayName: Task-fmt
-  #         continueOnError: true
-  #         inputs:
-  #           targetType: 'inline'
-  #           script: |
-  #             Write-Host "fmt is in progress"
-  #             terraform fmt -check -recursive             
+  - stage: ScanStage
+    displayName: Stage-Scanning
+    jobs:
+      - job: ScanJob
+        displayName: tflint+checkov+tfsec
+        steps:
+        - task: PowerShell@2
+          continueOnError: true
+          displayName: Task-tflint
+          inputs:
+            targetType: 'inline'
+            script: |
+              Write-Host "Tflint is in progress"
+              New-Item -ItemType Directory -Force -Path scan-results\tflint
+              tflint --recursive --format junit > scan-results\tflint\tflint.json        
+        - task: PowerShell@2
+          continueOnError: true
+          displayName: Task-tfsec
+          inputs:
+            targetType: 'inline'
+            script: |
+              Write-Host "Tfscan is in progress"
+              New-Item -ItemType Directory -Force -Path scan-results\tfsec
+              tfsec . --format junit --out scan-results\tfsec\tfsec.json
+        - task: PowerShell@2
+          displayName: Task-fmt
+          continueOnError: true
+          inputs:
+            targetType: 'inline'
+            script: |
+              Write-Host "fmt is in progress"
+              terraform fmt -check -recursive             
               
-  #       - task: PowerShell@2
-  #         displayName: Task-validate
-  #         inputs:
-  #           targetType: 'inline'
-  #           script: |
-  #             Write-Host "validate is in progress"              
-  #             terraform validate
-  #       - task: PublishBuildArtifacts@1
-  #         displayName: Publish Scan Artifacts
-  #         inputs:
-  #           PathtoPublish: 'scan-results'
-  #           ArtifactName: 'ScanResults'
-  #           publishLocation: 'Container'
+        - task: PowerShell@2
+          displayName: Task-validate
+          inputs:
+            targetType: 'inline'
+            script: |
+              Write-Host "validate is in progress"              
+              terraform validate
+        - task: PublishBuildArtifacts@1
+          displayName: Publish Scan Artifacts
+          inputs:
+            PathtoPublish: 'scan-results'
+            ArtifactName: 'ScanResults'
+            publishLocation: 'Container'
 
   - stage: InitPlanStage
     displayName: Stage-Init&Plan
@@ -76,26 +76,50 @@ stages:
             environmentServiceNameAzureRM: 'dec25'
             commandOptions: '-out=tfplan'
         - task: PowerShell@2
+          displayName: Convert tfplan to JSON
+          inputs:
+            targetType: 'inline'
+            script: |
+              terraform show -json tfplan > tfplan.json
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+
+        - task: PowerShell@2
+          displayName: Convert Plan to Text
+          inputs:
+            targetType: 'inline'
+            script: |
+              terraform show -no-color tfplan > tfplan.txt
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+
+        - task: PublishBuildArtifacts@1
+          displayName: Publish Terraform Plan
+          inputs:
+            PathtoPublish: '$(System.DefaultWorkingDirectory)/environments/dev/tfplan'
+            ArtifactName: 'TerraformPlan'
+            publishLocation: 'Container'
+        - task: PowerShell@2
           displayName: Run Infracost (Agent Tool)
           inputs:
             targetType: 'inline'
             script: |
               C:\agent\_work\_tool\infracost\infracost.exe --version
             workingDirectory: '$(System.DefaultWorkingDirectory)'
-  #       - task: PowerShell@2
-  #         displayName: Convert Plan to Text
-  #         inputs:
-  #           targetType: 'inline'
-  #           script: |
-  #             terraform show -no-color tfplan > tfplan.txt
-  #           workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
-  #       - task: PublishBuildArtifacts@1
-  #         displayName: Publish Terraform Plan
-  #         inputs:
-  #           PathtoPublish: '$(System.DefaultWorkingDirectory)/environments/dev/tfplan'
-  #           ArtifactName: 'TerraformPlan'
-  #           publishLocation: 'Container'
+
+        - task: PowerShell@2
+          displayName: Run Infracost
+          env:
+            INFRACOST_API_KEY: $(INFRACOST_API_KEY)
+          inputs:
+            targetType: 'inline'
+            script: |
+              New-Item -ItemType Directory -Force -Path scan-results\infracost
+
+              infracost breakdown `
+                --path tfplan.json `
+                --format json `
+                --out-file scan-results\infracost\infracost.json
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
 
         
 
