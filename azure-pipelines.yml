@@ -4,8 +4,6 @@ variables:
 
 pool: nov-25-pool
 
-
-
 stages:
   - stage: ScanStage
     displayName: Stage-Scanning
