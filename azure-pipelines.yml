@@ -100,15 +100,6 @@ stages:
             ArtifactName: 'TerraformPlan'
             publishLocation: 'Container'
         - task: PowerShell@2
-          displayName: Run Infracost (Agent Tool)
-          inputs:
-            targetType: 'inline'
-            script: |
-              C:\agent\_work\_tool\infracost\infracost.exe --version
-            workingDirectory: '$(System.DefaultWorkingDirectory)'
-
-
-        - task: PowerShell@2
           displayName: Run Infracost
           env:
             INFRACOST_API_KEY: $(INFRACOST_API_KEY)
@@ -118,12 +109,11 @@ stages:
               New-Item -ItemType Directory -Force -Path scan-results\infracost
 
               C:\agent\_work\_tool\infracost\infracost.exe breakdown `
-                --path tfplan `
-                --terraform-plan `
+                --path environments/dev `
+                --show-skipped `
                 --format json `
                 --out-file scan-results\infracost\infracost.json
-               workingDirectory: $(System.DefaultWorkingDirectory)/environments/dev
-
+            workingDirectory: $(System.DefaultWorkingDirectory)
         
 
   # - stage: ManualValidation
